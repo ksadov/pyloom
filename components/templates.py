@@ -318,7 +318,7 @@ class Thumbnails:
         # open image
         img = Image.open(filename)
         # resize
-        img.thumbnail((100, 100), Image.ANTIALIAS)
+        img.thumbnail((100, 100), Image.LANCZOS)
         # convert to tkinter image
         img = ImageTk.PhotoImage(img)
         return img

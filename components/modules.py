@@ -74,20 +74,20 @@ class Paint(Module):
         # for i in range(6):
         #     tk.Grid.columnconfigure(self.root, i, weight=1)
 
-        self.undo_button = tk.Label(self.root, image=icons.get_icon("undo-white", size=20), bg=bg_color(), cursor="hand2")
+        self.undo_button = tk.Label(self.root, image=icons.get_icon("undo-white", zsize=20), bg=bg_color(), cursor="hand2")
         self.undo_button.grid(row=0, column=0)
         self.undo_button.bind("<Button-1>", self.undo)
 
-        #self.redo_button = tk.Label(self.root, image=icons.get_icon("right-white", size=20), bg=bg_color(), cursor="hand2")
+        #self.redo_button = tk.Label(self.root, image=icons.get_icon("right-white", zsize=20), bg=bg_color(), cursor="hand2")
         #self.redo_button.grid(row=0, column=1)
         #self.redo_button.bind("<Button-1>", self.redo)
 
 
-        self.brush_button = tk.Label(self.root, image=icons.get_icon("brush-white", size=20), bg=bg_color(), cursor="hand2")
+        self.brush_button = tk.Label(self.root, image=icons.get_icon("brush-white", zsize=20), bg=bg_color(), cursor="hand2")
         self.brush_button.grid(row=0, column=1)
         self.brush_button.bind('<Button-1>', self.use_brush)
 
-        self.eraser_button = tk.Label(self.root, image=icons.get_icon("eraser-white", size=20), bg=bg_color(), cursor="hand2")
+        self.eraser_button = tk.Label(self.root, image=icons.get_icon("eraser-white", zsize=20), bg=bg_color(), cursor="hand2")
         self.eraser_button.grid(row=0, column=2)
         self.eraser_button.bind('<Button-1>', self.use_eraser)
 
@@ -128,7 +128,7 @@ class Paint(Module):
         self.thumbnails = Thumbnails(selection_callback=self.select_layer)
         self.thumbnails.body(self.layers_frame, height=450)
 
-        self.add_layer_button = tk.Label(self.layers_frame, image=icons.get_icon("plus-lightgray", size=20), bg=bg_color(), cursor="hand2")
+        self.add_layer_button = tk.Label(self.layers_frame, image=icons.get_icon("plus-lightgray", zsize=20), bg=bg_color(), cursor="hand2")
         self.add_layer_button.pack()
         self.add_layer_button.bind('<Button-1>', self.add_layer)
 
@@ -206,7 +206,7 @@ class Paint(Module):
             self.open_layer(filename, transparent)
             #self.refresh_buttons()
 
-    def add_layer(self):
+    def add_layer(self, event=None):
         # add new blank layer
 
         self.open_layer(self.blank_file)
@@ -260,7 +260,10 @@ class Paint(Module):
         self.thumbnails.set_selection(self.layers[idx]['filename'])
 
     def select_layer(self, filename, *args):
-        filename_list = [media['file'] for media in self.state.selected_node['multimedia']]
+        if 'multimedia' in self.state.selected_node:
+            filename_list = [media['file'] for media in self.state.selected_node['multimedia']]
+        else:
+            filename_list = []
         if filename in filename_list:
             idx = filename_list.index(filename)
         elif filename == self.blank_file:
