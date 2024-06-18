@@ -246,6 +246,14 @@ Reset zoom: `Control-0`
 
 # Instructions
 
+## Mac
+- `conda create -n pyloom python=3.10`
+- `conda activate pyloom`
+- `conda install pytorch::pytorch -c pytorch`
+- `pip install -r requirements.txt`
+- set the `OPENAI_API_KEY` env variable
+- `python main.py`
+
 ## Python
 
 0. Make sure you have tkinter installed
