@@ -12,9 +12,8 @@ from tkinter import ttk, messagebox, font
 from ttkthemes import ThemedStyle
 
 from controller import Controller
-from model import TreeModel, EMPTY_TREE
 from util.custom_tks import ClosableNotebook
-from util.util import json_open, json_create
+from util.util import json_open, json_create, timestamp
 from util.util_tk import create_menubar
 from view.colors import darkmode
 import PIL.Image
@@ -125,7 +124,7 @@ class Application:
             print("opening", filename)
             tab.state.open_tree(filename)
         else:
-            tab.state.load_tree_data(deepcopy(EMPTY_TREE))
+            tab.state.open_empty_tree()
 
 
     def close_tab(self, event=None, index=None):

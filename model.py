@@ -1785,8 +1785,8 @@ class TreeModel:
         self.io_update()
 
     def open_empty_tree(self):
-        self.tree_filename = None
         self.load_tree_data(deepcopy(EMPTY_TREE))
+        self.tree_filename = os.path.join(os.getcwd() + '/data', timestamp() + ".json")
         self.io_update()
 
     # Open a new tree json
