@@ -330,7 +330,7 @@ class Paint(Module):
         filename = os.path.join(media_dir, filename)
         img.save(filename, 'png')
         os.remove('tmp.ps')
-        return filename            
+        return filename
 
     def save_as(self):
         # open dialog asking for filename
@@ -350,7 +350,7 @@ class Paint(Module):
         else:
             filename = self.save_as_png(transparent=True)
         self.callbacks["Add multimedia"]['callback'](filenames=[filename])
-        
+
     def refresh_cursor(self):
         # change cursor icon to correspond to selected tool
         if self.selected_tool == 'pen':
@@ -413,7 +413,7 @@ class Paint(Module):
                 # save line options
                 self.c.delete(line)
             self.undo_lines.append(line_arr)
-    
+
     def redo(self, event):
         if len(self.undo_lines) > 0:
             line_arr = self.undo_lines.pop()
@@ -540,7 +540,7 @@ class Children(Module):
         else:
             self.toggle_hidden_button['image'] = icons.get_icon("invisible-lightgray")
             self.toggle_hidden_button['text'] = f' hide {num_hidden} hidden children'
-            
+
     def selection_updated(self):
         #self.children.save_windows()
         self.tree_updated()
@@ -550,8 +550,8 @@ class Children(Module):
         #pprint(self.children.windows)
         self.children.edit_on(child['id'])
         self.children.focus_textbox(child['id'])
-        
-        
+
+
 
     def toggle_hidden(self, *args):
         self.show_hidden = not self.show_hidden
@@ -567,7 +567,7 @@ class ReadChildren(Module):
         self.scroll_frame = None
         self.continue_option = None
         Module.__init__(self, 'read children', callbacks, state)
-    
+
     def build(self, parent):
         Module.build(self, parent)
         self.scroll_frame = ScrollableFrame(self.frame)
@@ -577,7 +577,7 @@ class ReadChildren(Module):
     def add_child(self, node):
         child_text = self.state.get_text_attribute(node, 'child_preview')
         child_text = child_text if child_text else node['text'][:150]
-        child_label = tk.Label(self.scroll_frame.scrollable_frame, text=child_text, bg=bg_color(), fg=text_color(), cursor='hand2', 
+        child_label = tk.Label(self.scroll_frame.scrollable_frame, text=child_text, bg=bg_color(), fg=text_color(), cursor='hand2',
                                anchor='w', justify='left', font=('Georgia', 12),
                                image=icons.get_icon('arrow-white', 16), compound=tk.LEFT, padx=10)
         child_label.bind("<Button-1>", lambda event, node=node: self.callbacks["Select node"]["callback"](node=node))
@@ -615,15 +615,15 @@ class ReadChildren(Module):
             return len(self.children) == 0
         else:
             # TODO
-            return True 
+            return True
 
 
     def show_options(self):
         condition = self.settings()['show_options']
         if condition == 'always':
-            return True 
+            return True
         elif condition == 'never':
-            return False 
+            return False
         else:
             return self.state.has_tag(node=self.state.selected_node, tag=condition)
 
@@ -655,7 +655,7 @@ class ReadChildren(Module):
 
     def selection_updated(self):
         self.refresh()
-    
+
     def tree_updated(self):
         self.refresh()
         #pass
@@ -701,7 +701,7 @@ class JanusPlayground(Module):
         self.textboxes.append(self.textbox)
         self.textbox.configure(**textbox_config(bg=edit_color()))
         #self.textbox.tag_config("generated", font=('Georgia', self.state.preferences['font_size'], 'bold'))
-        
+
         self.textbox.bind("<Key>", self.key_pressed)
         self.textbox.bind("<Alt-i>", self.inline_generate)
         self.textbox.bind("<Command-i>", self.inline_generate)
@@ -929,7 +929,7 @@ class MiniMap(Module):
         Module.__init__(self, 'minimap', callbacks, state)
         self.settings_frame = None
         self.minimap_pane = None
-        self.canvas = None 
+        self.canvas = None
         self.node_coords = {}
         self.levels = {}
         self.nodes = {}
@@ -941,8 +941,8 @@ class MiniMap(Module):
     def build(self, parent):
         Module.build(self, parent)
         self.settings_frame = CollapsableFrame(self.frame, title='Minimap settings', bg=bg_color())
-        self.minimap_settings = MinimapSettings(orig_params=self.state.module_settings['minimap'], 
-                                              user_params=self.state.user_module_settings.get('minimap', {}), 
+        self.minimap_settings = MinimapSettings(orig_params=self.state.module_settings['minimap'],
+                                              user_params=self.state.user_module_settings.get('minimap', {}),
                                               state=self.state, realtime_update=True, parent_module=self)
         self.minimap_settings.body(self.settings_frame.collapsable_frame)
         self.settings_frame.pack(side='top', fill='both', expand=True)
@@ -960,7 +960,7 @@ class MiniMap(Module):
         self.preview_textbox.configure(state='disabled', relief='raised')
         self.bind_mouse_events()
         self.refresh()
-    
+
     def tree_updated(self):
         self.refresh()
 
@@ -986,7 +986,7 @@ class MiniMap(Module):
         self.nodes = {}
         self.lines = {}
         self.reset()
-    
+
     def reset(self):
         self.node_coords = {}
         self.levels = {}
@@ -1009,7 +1009,7 @@ class MiniMap(Module):
         if self.settings()['prune_mode'] == 'ancestry_dist':
             pruned_tree = limited_branching_tree(self.ancestry, filtered_tree, depth_limit=self.settings()['path_length_limit'])
         elif self.settings()['prune_mode'] == 'selection_dist':
-            pruned_tree = limited_distance_tree(filtered_tree, self.selected_node, distance_limit=self.settings()['path_length_limit'], 
+            pruned_tree = limited_distance_tree(filtered_tree, self.selected_node, distance_limit=self.settings()['path_length_limit'],
                                                 node_dict=filtered_dict)
             self.ancestry = self.ancestry[-(self.settings()['path_length_limit'] + 1):]
         elif self.settings()['prune_mode'] == 'wavefunction_collapse':
@@ -1064,7 +1064,7 @@ class MiniMap(Module):
 
         for child in root['children']:
             child_x, child_y = self.node_coords[child["id"]]
-            self.draw_connector(child['id'], root_x, root_y, child_x, child_y, fill='#000000', width=self.settings()['line_thickness'], 
+            self.draw_connector(child['id'], root_x, root_y, child_x, child_y, fill='#000000', width=self.settings()['line_thickness'],
                                 offset=self.settings()['leaf_offset']*5/8,
                                 connections='horizontal' if self.settings()['horizontal'] else 'vertical')
             self.draw_precomputed_tree(child)
@@ -1263,7 +1263,7 @@ class Edit(Module):
 
         self.templates_frame = ttk.Frame(self.frame)
         self.templates_frame.pack(side='top', fill='x')
-        self.template_checkbox = tk.Checkbutton(self.templates_frame, text="Template", variable=self.template_bool, onvalue=True, 
+        self.template_checkbox = tk.Checkbutton(self.templates_frame, text="Template", variable=self.template_bool, onvalue=True,
                                                  offvalue=False, command=self.write_template)
         self.template_checkbox.pack(side='left')
 
@@ -1287,7 +1287,7 @@ class Edit(Module):
     def template_preset_changed(self, *args):
         template = self.template_preset.get()
         if template == 'none':
-            return 
+            return
         elif template == 'children_list':
             node_id = self.node['id']
             self.text_attributes['text'].textbox.insert(tk.END,
@@ -1295,7 +1295,7 @@ class Edit(Module):
             self.save_all()
             self.template_checkbox.select()
             self.write_template()
-            
+
 
     def toggle_pin(self, *args):
         if self.settings()['node_id']:
@@ -1325,13 +1325,13 @@ class Edit(Module):
         self.node = self.state.node(self.settings()['node_id']) if self.settings()['node_id'] else self.state.selected_node
         self.node_label.configure(text=f"editing node: {self.node['id']}")
         pinned = self.settings()['node_id'] is not None
-        if pinned: 
+        if pinned:
             self.node_label.configure(image=icons.get_icon('pin-red'), compound="left")
         else:
             self.node_label.configure(image='')
 
 
-        self.text_attributes['text'] = TextAttribute(master=self.textboxes_frame, attribute_name="text", 
+        self.text_attributes['text'] = TextAttribute(master=self.textboxes_frame, attribute_name="text",
                                                      read_callback=lambda: self.callbacks["Text"]["callback"](node_id=self.node['id'], raw=True),
                                                      write_callback=self.save_text,
                                                      expand=True,
@@ -1342,7 +1342,7 @@ class Edit(Module):
 
         if 'text_attributes' in self.node:
             for attribute in self.node['text_attributes']:
-                self.text_attributes[attribute] = TextAttribute(master=self.textboxes_frame, attribute_name=attribute, 
+                self.text_attributes[attribute] = TextAttribute(master=self.textboxes_frame, attribute_name=attribute,
                                                                 read_callback=lambda attribute=attribute: self.callbacks["Get text attribute"]["callback"](attribute=attribute, node=self.node),
                                                                 write_callback=lambda text, attribute=attribute: self.save_text_attribute(attribute_name=attribute, text=text),
                                                                 delete_callback=lambda attribute=attribute: self.delete_text_attribute(attribute),
@@ -1398,7 +1398,7 @@ class Edit(Module):
         # template: f string template always applied to text (but not sent to language model)
         # alt_text: text which displays in alt textbox when node is active
         # custom
-        
+
         # open menu to select attribute type
         menu = tk.Menu(self.frame, tearoff=0)
         menu.add_command(label="active_append", command=lambda: self.new_attribute("active_append"))
@@ -1438,7 +1438,7 @@ class Edit(Module):
             messagebox.showinfo("Custom Text Attribute", "Attribute already exists.")
             return
         self.state.add_text_attribute(self.node, name, '')
-        self.text_attributes[name] = TextAttribute(master=self.textboxes_frame, attribute_name=name, 
+        self.text_attributes[name] = TextAttribute(master=self.textboxes_frame, attribute_name=name,
                                                     read_callback=lambda: self.callbacks["Get text attribute"]["callback"](attribute=name, node=self.node),
                                                     write_callback=lambda text, attribute=name: self.save_text_attribute(attribute_name=attribute, text=text),
                                                     delete_callback=lambda attribute=name: self.delete_text_attribute(attribute),
@@ -1473,7 +1473,7 @@ class Transformers(Module):
         self.completions_frame = None
         self.completion_windows = None
         Module.__init__(self, "transformers", callbacks, state)
-        
+
     def build(self, parent):
         Module.build(self, parent)
         #self.scroll_frame = ScrollableFrame(self.frame, height=500)
@@ -1490,9 +1490,9 @@ class Transformers(Module):
         self.inputs_frame = tk.Frame(self.frame, bg=bg_color())
         self.inputs_frame.pack(side='top', fill='both', expand=True)
 
-        self.template_editor = TextAttribute(master=self.frame, attribute_name="template", 
-                                             read_callback=lambda: self.read_template(), 
-                                             write_callback=lambda text: self.write_template(text=text), 
+        self.template_editor = TextAttribute(master=self.frame, attribute_name="template",
+                                             read_callback=lambda: self.read_template(),
+                                             write_callback=lambda text: self.write_template(text=text),
                                              expand=True, parent_module=self)
         self.template_editor.pack(side='top', fill='both', expand=True)
 
@@ -1513,7 +1513,7 @@ class Transformers(Module):
 
         self.generate_button = ttk.Button(self.frame, text="Generate", image=icons.get_icon('brain-blue'), compound='left', command=self.generate)
         self.generate_button.pack(side='top', expand=False)
-        
+
         self.completions_frame = CollapsableFrame(self.frame, title='Completions', bg=bg_color())
         self.completion_windows = Windows(buttons=['close', 'save'])
         self.completion_windows.body(self.completions_frame.collapsable_frame)
@@ -1554,11 +1554,11 @@ class Transformers(Module):
         self.template = template
         self.set_empty_inputs()
         for input in template['inputs']:
-            self.input_editors[input] = TextAttribute(master=self.inputs_frame, attribute_name=input, 
+            self.input_editors[input] = TextAttribute(master=self.inputs_frame, attribute_name=input,
                                                       read_callback=lambda: self.read_input(input),
-                                                      write_callback=lambda text, input=input:self.write_input(input=input, text=text), 
-                                                      delete_callback=lambda input=input: self.remove_input(input), 
-                                                      expand=True, 
+                                                      write_callback=lambda text, input=input:self.write_input(input=input, text=text),
+                                                      delete_callback=lambda input=input: self.remove_input(input),
+                                                      expand=True,
                                                       max_height=10,
                                                       parent_module=self)
             self.input_editors[input].pack(side='top', fill='both', expand=True)
@@ -1618,9 +1618,9 @@ class Transformers(Module):
         self.update_prompt()
 
     def add_input(self, input):
-        self.input_editors[input] = TextAttribute(master=self.inputs_frame, attribute_name=input, 
-                                                  write_callback=lambda text, input=input:self.write_input(input=input, text=text), 
-                                                  delete_callback=lambda input=input: self.remove_input(input), 
+        self.input_editors[input] = TextAttribute(master=self.inputs_frame, attribute_name=input,
+                                                  write_callback=lambda text, input=input:self.write_input(input=input, text=text),
+                                                  delete_callback=lambda input=input: self.remove_input(input),
                                                   expand=True,
                                                   parent_module=self)
         self.input_editors[input].pack(side='top', fill='both', expand=True)
@@ -1630,7 +1630,7 @@ class Transformers(Module):
 
     def update_prompt(self, *args):
         # TODO database
-        inputs = self.inputs 
+        inputs = self.inputs
         try:
             self.prompt = eval(f'f"""{self.template["template"]}"""')
         except KeyError as e:
@@ -1655,7 +1655,7 @@ class Transformers(Module):
         )
         if file_path:
             self.open_template_file(file_path)
-            
+
     def save_template(self):
         self.write_all()
         file_path = filedialog.asksaveasfilename(
@@ -1691,7 +1691,7 @@ class GenerationSettings(Module):
     def __init__(self, callbacks, state):
         self.settings_control = None
         Module.__init__(self, "generation settings", callbacks, state)
-    
+
     def build(self, parent):
         Module.build(self, parent)
         self.settings_control = FullGenerationSettings(orig_params=self.state.generation_settings,
@@ -1708,7 +1708,7 @@ class GenerationSettings(Module):
 class FrameEditor(Module):
     def __init__(self, callbacks, state):
         self.frame_editor = None
-        self.preset_dropdown = None 
+        self.preset_dropdown = None
         self.save_preset_button = None
         self.presets = None
         self.preset = None
@@ -1719,13 +1719,13 @@ class FrameEditor(Module):
     def build(self, parent):
         Module.build(self, parent)
         self.frame_editor = TextAttribute(master=self.frame, attribute_name="frame",
-                                          read_callback=self.read_frame, 
+                                          read_callback=self.read_frame,
                                           write_callback=self.write_frame,
                                           expand=True,
                                           parent_module=self, max_height=30)
         self.frame_editor.pack(side='top', fill='both', expand=True, pady=10)
         self.frame_editor.textbox.configure(**code_textbox_config())
-    
+
         # TODO make collapsible
         self.state_viewer = TextAttribute(master=self.frame, attribute_name='state', bd=2, max_height=30, expand=True,
                                                 relief='raised')
@@ -1745,7 +1745,7 @@ class FrameEditor(Module):
 
         self.frame_editor.read()
         self.get_state()
-    
+
 
     def set_presets(self):
         options = self.presets.keys()
@@ -1855,7 +1855,7 @@ class Memories(Module):
         self.read()
 
 
-    
+
 class Vars(Module):
     def __init__(self, callbacks, state):
         self.vars_editor = None
@@ -1926,8 +1926,9 @@ class Wavefunction(Module):
         self.add_path_button = None
         self.reset_zoom_button = None
         self.save_image_button = None
-        self.model_list = ["ada", "ada", "babbage", "curie", "davinci", "text-davinci-002", "text-davinci-003", "code-davinci-002", "gpt-neo-1-3b", "gpt-neo-2-7b", "gpt-j-6b", "gpt-neo-20b"]
-        
+        self.model_list = ["davinci-002", "babbage-002", "mistralai/Mistral-7B-v0.1", "gpt-neo-1-3b", "gpt-neo-2-7b",
+                           "gpt-j-6b", "gpt-neo-20b"]
+
         self.ground_truth_textbox = None
         Module.__init__(self, 'wavefunction', callbacks, state)
 
@@ -1950,7 +1951,7 @@ class Wavefunction(Module):
         threshold_label.pack(side=tk.LEFT)
         self.threshold_slider = tk.Scale(self.config_frame, from_=0.0, to=0.25, resolution="0.01", orient=tk.HORIZONTAL, variable=self.threshold, sliderlength=5, bg=bg_color())
         self.threshold_slider.pack(side=tk.LEFT, padx=10)
-    
+
         self.wavefunction = BlockMultiverse(self.frame)
         self.wavefunction.frame.pack(side=tk.TOP, expand=True, fill=tk.BOTH)
 
@@ -1976,22 +1977,22 @@ class Wavefunction(Module):
         self.add_path_button.pack(side='left')
         self.save_image_button = ttk.Button(self.buttons_frame, text="Save image", compound='right', command=self.save_image)
         self.save_image_button.pack(side='left')
-        
+
         self.set_config()
-    
+
 
     def set_config(self):
         current_model = self.state.generation_settings['model']
         self.model.set(current_model if current_model in self.model_list else "ada")
         self.max_depth.set(3)
         self.threshold.set(0.1)
-        
+
 
     def propagate(self):
         if self.wavefunction.active_wavefunction():
             active_node = self.wavefunction.active_info()
             start_position = (active_node['x'], active_node['y'])
-            multiverse, ground_truth, prompt = self.state.generate_greedy_multiverse(max_depth=self.max_depth.get(), 
+            multiverse, ground_truth, prompt = self.state.generate_greedy_multiverse(max_depth=self.max_depth.get(),
                                                                                 prompt=active_node['prefix'],
                                                                                 unnormalized_amplitude=active_node['amplitude'],
                                                                                 ground_truth=self.ground_truth_textbox.get(1.0, tk.END),
@@ -1999,12 +2000,12 @@ class Wavefunction(Module):
                                                                                 engine=self.model.get())
         else:
             start_position = (0, 0)
-            multiverse, ground_truth, prompt = self.state.generate_greedy_multiverse(max_depth=self.max_depth.get(), 
+            multiverse, ground_truth, prompt = self.state.generate_greedy_multiverse(max_depth=self.max_depth.get(),
                                                                                 ground_truth=self.ground_truth_textbox.get(1.0, tk.END),
                                                                                 threshold=self.threshold.get(),
                                                                                 engine=self.model.get()
                                                                                 )
-                                                                      
+
         self.wavefunction.draw_multiverse(multiverse=multiverse, ground_truth=ground_truth,
                                                 start_position=start_position, prompt=prompt)
 

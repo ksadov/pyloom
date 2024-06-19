@@ -15,12 +15,12 @@ def generate(prompt, engine, goose=False):
         openai.organization = os.environ.get("OPENAI_ORGANIZATION", None)
     #print('calling engine', engine, 'at endpoint', openai.api_base)
     #print('prompt:', prompt)
-    response = openai.Completion.create(prompt=prompt,
+    response = openai.completions.create(prompt=prompt,
                                         max_tokens=1,
                                         n=1,
                                         temperature=0,
                                         logprobs=100,
-                                        model=engine)
+                                        model=engine).dict()
     return response
 
 # TODO multiple "ground truth" trajectories
@@ -32,7 +32,7 @@ def greedy_word_multiverse(prompt, ground_truth='', max_depth=3,  unnormalized_a
         return {}, ground_truth
     print('generating...')
     response = generate(prompt, engine, goose)
-    logprobs = response.choices[0]["logprobs"]["top_logprobs"][0]
+    logprobs = response['choices'][0]["logprobs"]["top_logprobs"][0]
     probs = {k: logprobs_to_probs(v) for k, v in sorted(logprobs.items(), key=lambda item: item[1], reverse=True)}
     multiverse = {token: {'normalized_prob': prob, 'unnormalized_prob': prob * unnormalized_amplitude, 'children': {}} for token, prob in probs.items()}
     ground_truth_token = ground_truth[0] if ground_truth else 'NO GROUND TRUTH'
