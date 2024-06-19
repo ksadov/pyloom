@@ -104,7 +104,7 @@ DEFAULT_GENERATION_SETTINGS = {
     'prompt_length': 6000,
     'logprobs': 0,
     #"adaptive": False,
-    "model": "gpt-3.5-turbo",
+    "model": "davinci-002",
     "stop": '',  # separated by '|'
     "start": '',
     "restart": '',
@@ -117,6 +117,21 @@ DEFAULT_GENERATION_SETTINGS = {
 
 DEFAULT_MODEL_CONFIG = {
     'models': {
+        'davinci-002': {
+            'model': 'davinci-002',
+            'type': 'openai',
+            'api_base': 'https://api.openai.com/v1'
+            },
+        'babbage-002': {
+            'model': 'babbage-002',
+            'type': 'openai',
+            'api_base': 'https://api.openai.com/v1'
+            },
+        'gpt-3.5-turbo-instruct': {
+            'model': 'gpt-3.5-turbo-instruct',
+            'type': 'openai',
+            'api_base': 'https://api.openai.com/v1'
+            },
         'gpt-3.5-turbo': {
             'model': 'gpt-3.5-turbo',
             'type': 'openai-chat',
@@ -166,7 +181,7 @@ DEFAULT_MODEL_CONFIG = {
 }
 
 DEFAULT_INLINE_GENERATION_SETTINGS = {
-    "model": "gpt-3.5-turbo",
+    "model": "davinci-002",
     "num_continuations": 8,
     "temperature": 1,
     "top_p": 1,
